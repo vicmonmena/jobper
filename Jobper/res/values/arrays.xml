@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sample_jobs_array">
+        <item>Android Engineer</item>
+        <item>PHP / CSS / JavaScript </item>
+        <item>Graphic Designer</item>
+        <item>Junior Front-End Developer</item>
+    </string-array>
+</resources>
