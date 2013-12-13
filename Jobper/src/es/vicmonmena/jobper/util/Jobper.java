@@ -13,11 +13,11 @@ public interface Jobper {
 	/**
 	 * Servicio donde se localizan ls Jobs.
 	 */
-	public final String URI_JOBS = "https://api.angel.co/1/jobs";
+	public final String URI_JOBS = "http://api.angel.co/1/jobs";
 	/**
 	 * Servicio donde se localizan las startups.
 	 */
-	public final String URI_STARTUP = "https://api.angel.co/1/startups/";
+	public final String URI_STARTUP = "http://api.angel.co/1/startups/";
 	
 	// Database
 	

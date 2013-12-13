@@ -1,15 +1,20 @@
 package es.vicmonmena.jobper.ui.components;
 
+import java.util.List;
+
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import es.vicmonmena.jobper.Controller;
 import es.vicmonmena.jobper.R;
+import es.vicmonmena.jobper.model.Job;
 import es.vicmonmena.jobper.ui.DetailsActivity;
 
 /**
@@ -30,7 +35,7 @@ public class JobsFragment extends ListFragment {
 	/**
 	 * Adapter para el listado de Jobs
 	 */
-	private ArrayAdapter<CharSequence> adapter;
+	private JobAdapter adapter;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -43,10 +48,7 @@ public class JobsFragment extends ListFragment {
 			singleColumn = true;
 		}
 
-		adapter = ArrayAdapter.createFromResource(getActivity(), 
-			R.array.sample_jobs_array, android.R.layout.simple_list_item_1);
-		
-		setListAdapter(adapter);
+		new JobsAsyncTask().execute();
 	}
 	
 	@Override
@@ -72,6 +74,33 @@ public class JobsFragment extends ListFragment {
 			transaction.replace(R.id.job_details_fragment, jobDetails);
 			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			transaction.commit();
+		}
+	}
+	
+	private class JobsAsyncTask extends AsyncTask<Void, Void, List<Job>> {
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected List<Job> doInBackground(Void... params) {
+			return Controller.getInstance().loadJobs();
+		}
+		
+		@Override
+		protected void onPostExecute(List<Job> result) {
+			/*
+			adapter = ArrayAdapter.createFromResource(getActivity(), 
+					R.array.sample_jobs_array, android.R.layout.simple_list_item_1);
+				
+				setListAdapter(adapter);*/
+			adapter = new JobAdapter(getActivity(), 
+				android.R.layout.simple_list_item_1, R.layout.job_item, result);
+			setListAdapter(adapter);
+			super.onPostExecute(result);
 		}
 	}
 }

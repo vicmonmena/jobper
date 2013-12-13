@@ -2,9 +2,11 @@ package es.vicmonmena.jobper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
+import es.vicmonmena.jobper.model.Job;
 import es.vicmonmena.jobper.net.CustomHttpConnection;
 import es.vicmonmena.jobper.net.util.JsonParser;
 import es.vicmonmena.jobper.util.Jobper;
@@ -53,18 +55,20 @@ public class Controller {
 	/**
 	 * Load a list of jobs
 	 */
-	public void loadJobs() {
+	public List<Job> loadJobs() {
+		
+		List<Job> jobs = null;
 		
 		InputStream is =  null;
 		try {
 			is = CustomHttpConnection.getJobs(Jobper.URI_JOBS);
-			
-			JsonParser.parseJobs(is);
+			jobs = JsonParser.parseJobs(is);
 		} catch (IOException e) {
 			Log.e(TAG, "Exception in searchAngelListUser");
 		}
+		
+		return jobs;
 	}
-	
 	
 	/**
 	 * Load an image.

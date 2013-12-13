@@ -7,4 +7,7 @@
     <string name="action_favorites">Favorites</string>
     <string name="action_info">Info</string>
 
+    <string name="job_title_hint">No title</string>
+    <string name="job_date_hint">No date</string>
+    <string name="show_job_details">Show job details</string>
 </resources>

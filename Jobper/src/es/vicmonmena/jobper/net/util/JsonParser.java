@@ -3,9 +3,12 @@ package es.vicmonmena.jobper.net.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.util.JsonReader;
 import android.util.Log;
+import es.vicmonmena.jobper.model.Job;
 
 public class JsonParser {
 
@@ -44,32 +47,43 @@ public class JsonParser {
 		
 	}
 	
-	public static void parseJobs(InputStream is) throws IOException {
+	public static List<Job> parseJobs(InputStream is) throws IOException {
+		List<Job> jobs = null;
 		JsonReader reader = new JsonReader(new InputStreamReader(is, "UTF-8"));
 		try {
-			reader.beginArray();
+			reader.beginObject();
+			String nodeRoot = reader.nextName();
 			
-			while (reader.hasNext()) {
-				reader.beginObject();
+			if (nodeRoot.equals("jobs")) {
+				reader.beginArray();
+				
+				jobs = new ArrayList<Job>();
+				
 				while (reader.hasNext()) {
-					String node = reader.nextName();
-					if (node.equals("id")) {
-						reader.nextString();
-					} else if (node.equals("title")) {
-						reader.nextString();
-					}  else if (node.equals("update_at")) {
-						reader.nextString();
-					} else if (node.equals("salary_min")) {
+					reader.beginObject();
+					while (reader.hasNext()) {
+						Job job = new Job();
+						String node = reader.nextName();
+						if (node.equals("id")) {
+							job.setJobId(reader.nextString());
+						} else if (node.equals("title")) {
+							job.setTitle(reader.nextString());
+						}  else if (node.equals("update_at")) {
+							job.setUpdateAt(reader.nextString());
+						} else if (node.equals("salary_min")) {
+							job.setSalaryMin(reader.nextString());
+						} else if (node.equals("salary_max")) {
+							job.setSalaryMax(reader.nextString());
+						}
 						
-					} else if (node.equals("salary_max")) {
+						// location: tags -> LocationTag
 						
+						jobs.add(job);
 					}
-					
-					// location: tags -> LocationTag
+					reader.endObject();
 				}
-				reader.endObject();
+				reader.endArray();
 			}
-			reader.endArray();
 		} catch (IOException e) {
 			Log.i(TAG, "IOException parsing Json...");
 		} catch (Exception e) {
@@ -77,6 +91,6 @@ public class JsonParser {
 		} finally {
 			reader.close();
 		}
-		
+		return jobs;
 	}
 }
