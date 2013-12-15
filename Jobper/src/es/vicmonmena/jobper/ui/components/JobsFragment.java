@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import es.vicmonmena.jobper.Controller;
 import es.vicmonmena.jobper.R;
@@ -55,18 +54,18 @@ public class JobsFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		
-		String jobTitle = adapter.getItem(position).toString();
+		String jobId = adapter.getItem(position).getJobId();
 
 		if (singleColumn){
 			Intent intent = new Intent(getActivity(), DetailsActivity.class);
-			intent.putExtra(JobDetailsFragment.JOB_TITLE, jobTitle);
+			intent.putExtra(JobDetailsFragment.JOB_ID, jobId);
 			startActivity(intent);
 		} else {
 			FragmentManager fm = getFragmentManager();
 			FragmentTransaction transaction = fm.beginTransaction();
 
 			Bundle args = new Bundle();
-			args.putCharSequence(JobDetailsFragment.JOB_TITLE, jobTitle);
+			args.putCharSequence(JobDetailsFragment.JOB_ID, jobId);
 			
 			JobDetailsFragment jobDetails = new JobDetailsFragment();
 			jobDetails.setArguments(args);
@@ -77,6 +76,11 @@ public class JobsFragment extends ListFragment {
 		}
 	}
 	
+	/**
+	 * 
+	 * @author vicmonmena
+	 *
+	 */
 	private class JobsAsyncTask extends AsyncTask<Void, Void, List<Job>> {
 
 		@Override
@@ -92,11 +96,6 @@ public class JobsFragment extends ListFragment {
 		
 		@Override
 		protected void onPostExecute(List<Job> result) {
-			/*
-			adapter = ArrayAdapter.createFromResource(getActivity(), 
-					R.array.sample_jobs_array, android.R.layout.simple_list_item_1);
-				
-				setListAdapter(adapter);*/
 			adapter = new JobAdapter(getActivity(), 
 				android.R.layout.simple_list_item_1, R.layout.job_item, result);
 			setListAdapter(adapter);

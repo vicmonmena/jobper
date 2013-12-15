@@ -53,7 +53,8 @@ public class Controller {
 	}
 	
 	/**
-	 * Load a list of jobs
+	 * Devuelve una lista de Jobs.
+	 * @return lista de Jobs.
 	 */
 	public List<Job> loadJobs() {
 		
@@ -71,6 +72,26 @@ public class Controller {
 	}
 	
 	/**
+	 * Devuelve la información completa de un Jobs.
+	 * @param id - identificador del job buscado.
+	 * @return Jobs con el identificador encontrado.
+	 */
+	public Job loadJob(String id) {
+		
+		Job job = null;
+		
+		InputStream is =  null;
+		try {
+			is = CustomHttpConnection.getJobs(Jobper.URI_JOBS + "/" + id);
+			job = JsonParser.parseJob(is);
+		} catch (IOException e) {
+			Log.e(TAG, "Exception in searchAngelListUser");
+		}
+		
+		return job;
+	}
+	
+	/**
 	 * Load an image.
 	 */
 	public void loadImage() {
@@ -78,16 +99,9 @@ public class Controller {
 	}
 	
 	/**
-	 * Load Job details.
-	 */
-	public void loadJobDetails() {
-		
-	}
-	
-	/**
 	 * Mark/unmark a job as favorite.
 	 */
-	public void markJobAsFavorite() {
-		// Service
+	public boolean markJobAsFavorite() {
+		return true;
 	}
 }

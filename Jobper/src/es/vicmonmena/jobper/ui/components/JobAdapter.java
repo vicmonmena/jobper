@@ -35,7 +35,7 @@ public class JobAdapter extends ArrayAdapter<Job>{
 		ViewHolder holder = null;
 		
 		if (convertView == null) {
-			view = mInflater.inflate(R.layout.job_item, parent, false);
+			view = mInflater.inflate(R.layout.job_row_item, parent, false);
 			holder = new ViewHolder();
 			holder.jobTitleTextView = (TextView) view.findViewById(R.id.jobTitleTextView);
 			holder.jobDateTextView = (TextView) view.findViewById(R.id.jobDateTextView);
