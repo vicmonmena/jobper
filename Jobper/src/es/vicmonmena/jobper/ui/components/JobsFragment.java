@@ -54,18 +54,17 @@ public class JobsFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		
-		String jobId = adapter.getItem(position).getJobId();
-
+		Job selectedJob = adapter.getItem(position);
 		if (singleColumn){
 			Intent intent = new Intent(getActivity(), DetailsActivity.class);
-			intent.putExtra(JobDetailsFragment.JOB_ID, jobId);
+			intent.putExtra(JobDetailsFragment.JOB, selectedJob);
 			startActivity(intent);
 		} else {
 			FragmentManager fm = getFragmentManager();
 			FragmentTransaction transaction = fm.beginTransaction();
 
 			Bundle args = new Bundle();
-			args.putCharSequence(JobDetailsFragment.JOB_ID, jobId);
+			args.putParcelable(JobDetailsFragment.JOB, selectedJob);
 			
 			JobDetailsFragment jobDetails = new JobDetailsFragment();
 			jobDetails.setArguments(args);
@@ -97,7 +96,7 @@ public class JobsFragment extends ListFragment {
 		@Override
 		protected void onPostExecute(List<Job> result) {
 			adapter = new JobAdapter(getActivity(), 
-				android.R.layout.simple_list_item_1, R.layout.job_item, result);
+				android.R.layout.simple_list_item_1, R.layout.job_row_item, result);
 			setListAdapter(adapter);
 			super.onPostExecute(result);
 		}

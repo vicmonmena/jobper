@@ -1,30 +1,119 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
-    android:orientation="vertical">
+    android:padding="5dp" >
 
     <TextView
-        android:id="@+id/jtitle"
+        android:id="@+id/jobSalaryminTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
-    <TextView
-        android:id="@+id/jpublished"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-    <TextView
-        android:id="@+id/jsalarymax"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-    <TextView
-        android:id="@+id/jsalarymin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_alignLeft="@+id/jobPublishedTxt"
+        android:layout_below="@+id/jobPublishedTxt"
+        android:hint="@string/job_details_salarymin_hint"
+        android:textColor="#c27ba0"
+        android:textSize="16sp" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/shareJobBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:background="#085394"
+        android:contentDescription="@string/share_job_details"
+        android:drawableLeft="@drawable/ic_action_share"
+        android:paddingLeft="5dp"
+        android:paddingRight="10dp"
+        android:text="@string/share_job_details"
+        android:textColor="#FFF"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/textView1"
+        android:text="@string/job_details_salary_min_lbl"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/jobSalarymaxTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/jobSalaryminTxt"
+        android:layout_below="@+id/jobSalaryminTxt"
+        android:hint="@string/job_details_salarymax_hint"
+        android:textColor="#c27ba0"
+        android:textSize="16sp" />
+
+    <FrameLayout
+        android:id="@+id/startup_details_fragment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/jobSalarymaxTxt"
+        android:layout_marginTop="30dp" >
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/startup_details_fragment"
+        android:layout_alignLeft="@+id/TextView01"
+        android:text="@string/job_details_salary_max_lbl"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/jobPublishedTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/TextView01"
+        android:layout_alignRight="@+id/markAsFavoriteImg"
+        android:layout_marginRight="13dp"
+        android:hint="@string/job_details_published_hint"
+        android:textColor="#c27ba0"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/markAsFavoriteImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/startup_details_fragment"
+        android:layout_marginRight="26dp"
+        android:contentDescription="@string/cd_unmarked_as_favorite"
+        android:onClick="onClickView"
+        android:src="@drawable/ic_unmark_as_favorite" />
+
+    <TextView
+        android:id="@+id/jobTitleTxt"
+        style="@style/job_details_title_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/markAsFavoriteImg"
+        android:layout_alignLeft="@+id/startup_details_fragment"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="21dp"
+        android:hint="@string/job_details_title_hint" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/jobTitleTxt"
+        android:layout_below="@+id/jobTitleTxt"
+        android:layout_marginTop="14dp"
+        android:text="@string/job_details_published_lbl"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16sp" />
+
+</RelativeLayout>

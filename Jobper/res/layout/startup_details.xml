@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <TextView
+        android:id="@+id/jobProductDescTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/jobLocationTxt"
+        android:layout_alignRight="@+id/startupLogoImg"
+        android:layout_below="@+id/jobLocationTxt"
+        android:layout_marginTop="20dp"
+        android:background="#eeeeee"
+        android:hint="@string/job_details_product_desc_hint"
+        android:maxLines="5"
+        android:minLines="3"
+        android:padding="5dp"
+        android:scrollbars="vertical"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/jobLocationTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/jobStartupTxt"
+        android:layout_below="@+id/jobStartupTxt"
+        android:hint="@string/job_details_location_hint"
+        android:textColor="#c27ba0"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/startupLogoImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/jobProductDescTxt"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/jobStartupTxt"
+        android:layout_marginRight="16dp"
+        android:contentDescription="@string/cd_company_logo"
+        android:onClick="onClickView"
+        android:src="@drawable/ic_imafe_not_found" />
+
+    <TextView
+        android:id="@+id/jobStartupTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:hint="@string/job_details_startup_hint"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:textSize="16sp" />
+
+</RelativeLayout>

@@ -10,4 +10,30 @@
     <string name="job_title_hint">No title</string>
     <string name="job_date_hint">No date</string>
     <string name="show_job_details">Show job details</string>
+    
+    
+    <string name="job_details_title_hint">No title</string>
+    <string name="job_details_published_hint">No published date</string>
+    <string name="job_details_salarymin_hint">No salary min</string>
+    <string name="job_details_salarymax_hint">No salary max</string>
+    
+    <string name="job_details_startup_hint">No startup name</string>
+    <string name="job_details_location_hint">No location</string>
+    <string name="job_details_product_desc_hint">No product description</string>
+    <string name="job_details_job_role_hint">No job role</string>
+
+    <string name="loading_job_details">Loading&#8230;</string>
+    <string name="share_job_details">Share</string>
+    
+    <string name="job_details_published_lbl">Published:</string>
+    <string name="job_details_salary_min_lbl">Min. Salary:</string>
+    <string name="job_details_salary_max_lbl">Max. Salary:</string>
+    <string name="job_details_job_type_lbl">Job Type:</string>
+    <string name="cd_marked_as_favorite">Marked as Favorite</string>
+    <string name="cd_unmarked_as_favorite">Unmarked as Favorite</string>
+    <string name="cd_company_logo">Company logo</string>
+    
+    <string name="menu_share_job">Share job</string>
+    
+    <string name="msg_uri_not_found">Any URL company</string>
 </resources>

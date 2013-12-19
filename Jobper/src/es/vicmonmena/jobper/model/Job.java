@@ -1,11 +1,14 @@
 package es.vicmonmena.jobper.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Representa una Startup
  * @author vicmonmena
  *
  */
-public class Job {
+public class Job implements Parcelable {
 
 	/**
 	 * 
@@ -35,6 +38,14 @@ public class Job {
 	 * 
 	 */
 	private String location;
+	/**
+	 * Startup asociada al Job.
+	 */
+	private Startup startup;
+	/**
+	 * Marcado como favorito
+	 */
+	private boolean favorite;
 	
 	// Construtors
 	
@@ -42,6 +53,10 @@ public class Job {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Job(Parcel in) {
+		readFromParcel(in);
+	}
+	
 	// Getter y settet
 	
 	public int getId() {
@@ -99,4 +114,61 @@ public class Job {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+
+	public Startup getStartup() {
+		return startup;
+	}
+	
+	public void setStartup(Startup startup) {
+		this.startup = startup;
+	}
+	
+	public boolean isFavorite() {
+		return favorite;
+	}
+	
+	public void setFavorite(boolean favorite) {
+		this.favorite = favorite;
+	}
+	
+	// Parcelable methods
+	
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(id);
+		dest.writeString(jobId);
+		dest.writeString(title);
+		dest.writeString(updateAt);
+		dest.writeString(salaryMin);
+		dest.writeString(salaryMax);
+		dest.writeByte((byte) (favorite ? 1 : 0));
+	}
+	
+	private void readFromParcel(Parcel in) {
+		id = in.readInt();
+		jobId = in.readString();
+		title = in.readString();
+		updateAt = in.readString();
+	    salaryMin = in.readString();
+	    salaryMax = in.readString();
+	    favorite = in.readByte() != 0;
+    }
+	
+	public static final Parcelable.Creator<Job> CREATOR = 
+		new Parcelable.Creator<Job>() {
+        public Job createFromParcel(Parcel in) {
+            return new Job(in);
+        }
+ 
+        public Job[] newArray(int size) {
+            return new Job[size];
+        }
+    };
+
 }

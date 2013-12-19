@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:padding="5dp"
-    android:background="#0F0">
+    android:padding="5dp">
 
     <FrameLayout 
         android:id="@+id/jobs_fragment"

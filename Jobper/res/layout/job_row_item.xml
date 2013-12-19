@@ -17,15 +17,17 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:hint="@string/job_title_hint"
-            android:textSize="20sp"/>
+            android:maxLines="1"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/jobDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/job_date_hint"
+            android:maxLines="1"
             android:textColor="#c27ba0"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
     
     </LinearLayout>
 
@@ -34,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:src="@drawable/job_row_image_item" />
+        android:src="@drawable/job_row_image_item" 
+        android:contentDescription="@string/show_job_details"/>
 
 </LinearLayout>
