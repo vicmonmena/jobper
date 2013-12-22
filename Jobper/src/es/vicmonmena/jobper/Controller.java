@@ -9,17 +9,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
+import es.vicmonmena.jobper.database.JobProvider;
+import es.vicmonmena.jobper.database.util.DBConstants;
 import es.vicmonmena.jobper.model.Job;
+import es.vicmonmena.jobper.model.Startup;
 import es.vicmonmena.jobper.net.CustomHttpConnection;
 import es.vicmonmena.jobper.net.util.JsonParser;
-import es.vicmonmena.jobper.util.Jobper;
+import es.vicmonmena.jobper.net.util.NETConstants;
 
 /**
- * MVC pattern.
+ * Clase controlador del Patrón de diseño MVC.
  * 
  * @author vicmonmena
  *
@@ -52,17 +60,17 @@ public class Controller {
 	}
 	
 	/**
-	 * Devuelve una lista de Jobs.
+	 * Devuelve una lista de Jobs del servicio en Internet.
 	 * @return lista de Jobs.
 	 */
-	public List<Job> loadJobs() {
+	public List<Job> loadJobs(AsyncTask task) {
 		
 		List<Job> jobs = null;
 		
 		InputStream is =  null;
 		try {
-			is = CustomHttpConnection.customGetRequest(Jobper.URI_JOBS);
-			jobs = JsonParser.parseJobs(is);
+			is = CustomHttpConnection.customGetRequest(NETConstants.URI_JOBS + "?" + NETConstants.PARAM_PER_PAGE + "20");
+			jobs = JsonParser.parseJobs(task, is);
 		} catch (IOException e) {
 			Log.e(TAG, "Exception in searchAngelListUser");
 		}
@@ -71,27 +79,29 @@ public class Controller {
 	}
 	
 	/**
-	 * Devuelve la información completa de un Jobs.
+	 * Devuelve la información de una Startup asociada a un Job.
 	 * @param id - identificador del job buscado.
 	 * @return Jobs con el identificador encontrado.
 	 */
-	public Job loadJob(String id) {
+	public Startup loadStartup(AsyncTask task, String id) {
 		
-		Job job = null;
+		Startup startup = null;
 		
 		InputStream is =  null;
 		try {
-			is = CustomHttpConnection.customGetRequest(Jobper.URI_JOBS + "/" + id);
-			job = JsonParser.parseJob(is);
+			is = CustomHttpConnection.customGetRequest(NETConstants.URI_JOBS + "/" + id);
+			startup = JsonParser.parseStartup(task, is);
 		} catch (IOException e) {
 			Log.e(TAG, "Exception in searchAngelListUser");
 		}
 		
-		return job;
+		return startup;
 	}
 	
 	/**
-	 * Carga una imagen a partir de una URL
+	 * Carga una imagen a partir de una URL 
+	 * @param uri
+	 * @return
 	 */
 	public Drawable loadImage(String uri) {	
 		Drawable image = null;
@@ -108,33 +118,88 @@ public class Controller {
 	}
 	
 	/**
-	 * Mark/unmark a job as favorite.
+	 * Devuelve una lista de Jobs almacenados en BBDD, marcados como favoritos.
+	 * @return lista de Jobs.
 	 */
-	public boolean markJobAsFavorite() {
-		return true;
+	public Cursor loadFavoriteJobs(Context context) {
+		
+		ContentResolver cr = context.getContentResolver();
+        Cursor c = cr.query(JobProvider.CONTENT_URI, 
+        		DBConstants.PROJECTION, null, null, null);
+		
+		return c;
 	}
 	
-	public void shareJob(Job job, Context context) {
+	/**
+	 * Marca/desmarca un empleo como favorito.
+	 * @param context
+	 * @param job
+	 * @return true if is marked as favorite, false if is unmarked as famorite.
+	 */
+	public boolean markJobAsFavorite(Context context, Job job) {
+		boolean markedAs = false;
+		ContentResolver cr = context.getContentResolver();
+		
+		if (!job.isFavorite()) {
+			ContentValues values = new ContentValues(1);
+			
+			values.put(DBConstants.JOB_ID, job.getJobId());
+			values.put(DBConstants.TITLE, job.getTitle());
+			values.put(DBConstants.UPDATE_AT, job.getUpdateAt());
+			values.put(DBConstants.SALARY_MIN, job.getSalaryMin());
+			values.put(DBConstants.SALARY_MAX, job.getSalaryMax());
+			values.put(DBConstants.LOCATION, job.getLocation());
+			
+			if (cr.insert(JobProvider.CONTENT_URI, values) != null) {
+				markedAs = true;
+			}
+		} else {
+			int result = cr.delete(JobProvider.CONTENT_URI,
+					DBConstants.JOB_ID + "=" + job.getJobId(), null);
+			if (result > 0) {
+				markedAs = false;
+			}
+		}
+		return markedAs;
+	}
+	
+	public boolean checkJobIsFavorite(Context context, String jobId) {
+		ContentResolver cr = context.getContentResolver();
+		Uri uri = Uri.parse(JobProvider.CONTENT_URI + "/" + jobId);
+		return cr.query(uri, DBConstants.PROJECTION_SIMPLE, 
+	        	null, null, null).getCount() == 1;
+	}
+	/**
+	 * Comparte un Job en redes socialesemail,..
+	 * @param job
+	 * @param context
+	 */
+	public void shareJob(Context context, Job job) {
     	Log.i(TAG, "Sharing job...");
-    	String text = "";
-        	
+    	StringBuilder text = new StringBuilder();
+    	text.append(context.getString(R.string.msg_new_job_offer));
+    	text.append(": ");
+        text.append(job.getTitle());
+        text.append(" (");
+        text.append(job.getLocation());
+        text.append(") ");
+        text.append(context.getString(R.string.msg_from_jobper));
     	Intent intent = new Intent(Intent.ACTION_SEND);
-    	intent.putExtra(Intent.EXTRA_TEXT, text);
+    	intent.putExtra(Intent.EXTRA_TEXT, text.toString());
     	intent.setType("text/plain");
 		context.startActivity(Intent.createChooser(intent, context.getString(R.string.menu_share_job)));
-		
 	}
 	
 	/**
 	 * Obtiene una fecha formateada a dd MMM yyyy de un String con una fecha con 
-	 * formato yyyy-MM-dd HH:mm:ss
+	 * formato yyyy-MM-ddTHH:mm:ssZ
 	 * @param date
 	 * @return
 	 */
 	public static String getDateFormat(String date) {
-	    DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 	    inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-	    DateFormat outputFormat = new SimpleDateFormat("dd MMM yyyy");
+	    DateFormat outputFormat = new SimpleDateFormat("dd MMMM yyyy");
 	    Date parsed = new Date();
 	    try {
 	        parsed = inputFormat.parse(date);

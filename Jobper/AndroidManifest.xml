@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="13"
         android:targetSdkVersion="17" />
     
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -25,7 +25,12 @@
         </activity>
         <activity
             android:name=".ui.DetailsActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name" 
+            android:parentActivityName=".ui.MainActivity" />
+        <provider
+            android:name=".database.JobProvider"
+            android:authorities="es.vicmonmena.jobper.job"
+            android:multiprocess="true"/>
     </application>
 
 </manifest>

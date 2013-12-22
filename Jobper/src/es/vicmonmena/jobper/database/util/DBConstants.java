@@ -1,25 +1,11 @@
-package es.vicmonmena.jobper.util;
+package es.vicmonmena.jobper.database.util;
 
 /**
- * Iterfaz con valores constantes.
- * 
+ * Constantes para trabajar con la persistencia de datos.
  * @author vicmonmena
  *
  */
-public interface Jobper {
-	
-	// Net
-	
-	/**
-	 * Servicio donde se localizan ls Jobs.
-	 */
-	public final String URI_JOBS = "http://api.angel.co/1/jobs";
-	/**
-	 * Servicio donde se localizan las startups.
-	 */
-	public final String URI_STARTUP = "http://api.angel.co/1/startups/";
-	
-	// Database
+public interface DBConstants {
 	
 	/**
 	 * Nombre de la base de datos.
@@ -57,4 +43,17 @@ public interface Jobper {
 	 * Campo salary max de la tabla job de la base de datos.
 	 */
 	public final String SALARY_MAX = "salarymax";
+	/**
+	 * Campo location de la tabla job de la base de datos.
+	 */
+	public final String LOCATION = "location";
+	/**
+	 * Campos obtenidos para comprobar que existe un Job en la BBDD.
+	 */
+	public final String[] PROJECTION_SIMPLE = {JOB_ID};
+	/**
+	 * Campos que obtenemos para mostrar en un listado de viajes.
+	 */
+	public static final String[] PROJECTION = {_ID, JOB_ID, TITLE, UPDATE_AT, 
+		SALARY_MIN, SALARY_MAX, LOCATION};
 }

@@ -1,13 +1,15 @@
-package es.vicmonmena.jobper.ui.components;
+package es.vicmonmena.jobper.ui.components.widget;
 
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import es.vicmonmena.jobper.Controller;
 import es.vicmonmena.jobper.R;
 import es.vicmonmena.jobper.model.Job;
 
@@ -31,23 +33,23 @@ public class JobAdapter extends ArrayAdapter<Job>{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
-		View view = null;
-		ViewHolder holder = null;
+		View rowView = convertView;
+		ViewHolder holder = new ViewHolder();
 		
-		if (convertView == null) {
-			view = mInflater.inflate(R.layout.job_row_item, parent, false);
-			holder = new ViewHolder();
-			holder.jobTitleTextView = (TextView) view.findViewById(R.id.jobTitleTextView);
-			holder.jobDateTextView = (TextView) view.findViewById(R.id.jobDateTextView);
-			view.setTag(holder);
+		if (rowView == null) {
+			rowView = mInflater.inflate(R.layout.job_row_item, parent, false);
+			holder.jobTitleTextView = (TextView) rowView.findViewById(R.id.jobTitleTextView);
+			holder.jobDateTextView = (TextView) rowView.findViewById(R.id.jobDateTextView);
+			rowView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
+		Log.e("JobAdapter", jobs.get(position).getTitle());
 		holder.jobTitleTextView.setText(jobs.get(position).getTitle());
-		holder.jobDateTextView.setText(jobs.get(position).getUpdateAt());
+		String date = Controller.getDateFormat(jobs.get(position).getUpdateAt());
+		holder.jobDateTextView.setText(date);
 		
-		return view;
+		return rowView;
 	}
 
 	static class ViewHolder {

@@ -5,7 +5,22 @@
         AppBaseTheme from res/values/styles.xml on API 11+ devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
-        <!-- API 11 theme customizations can go here. -->
+        <item name="android:actionBarStyle">@style/customActionBar</item>
+        <item name="android:actionBarTabBarStyle">@style/customActionBarTab</item>
     </style>
 
+    <!-- ActionBar styles -->
+    <style name="customActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">#c27ba0</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+    </style>
+    
+    <style name="customActionBarTab" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/custom_tab_indicator_selector</item>
+    </style>
+    
+    <!-- ActionBar title text -->
+    <style name="MyActionBarTitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#ffffff</item>
+    </style>
 </resources>

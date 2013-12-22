@@ -5,7 +5,8 @@
     
     <string name="action_jobs">Jobs</string>
     <string name="action_favorites">Favorites</string>
-    <string name="action_info">Info</string>
+    <string name="action_info">Jobper is a job finder mobile client based on AngelList platform and developed by @vicmonmena</string>
+    <string name="action_share">Share</string>
 
     <string name="job_title_hint">No title</string>
     <string name="job_date_hint">No date</string>
@@ -23,17 +24,20 @@
     <string name="job_details_job_role_hint">No job role</string>
 
     <string name="loading_job_details">Loading&#8230;</string>
-    <string name="share_job_details">Share</string>
     
     <string name="job_details_published_lbl">Published:</string>
     <string name="job_details_salary_min_lbl">Min. Salary:</string>
     <string name="job_details_salary_max_lbl">Max. Salary:</string>
+    <string name="job_details_location_lbl">Location:</string>
     <string name="job_details_job_type_lbl">Job Type:</string>
     <string name="cd_marked_as_favorite">Marked as Favorite</string>
     <string name="cd_unmarked_as_favorite">Unmarked as Favorite</string>
     <string name="cd_company_logo">Company logo</string>
     
     <string name="menu_share_job">Share job</string>
-    
+
     <string name="msg_uri_not_found">Any URL company</string>
+    
+    <string name="msg_new_job_offer">New job offer</string>
+    <string name="msg_from_jobper">from #jobper</string>
 </resources>

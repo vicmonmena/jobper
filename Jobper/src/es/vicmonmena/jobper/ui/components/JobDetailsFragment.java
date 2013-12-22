@@ -3,13 +3,11 @@ package es.vicmonmena.jobper.ui.components;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import es.vicmonmena.jobper.Controller;
@@ -48,15 +46,19 @@ public class JobDetailsFragment extends Fragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		
-		((TextView) getView().findViewById(R.id.jobTitleTxt)).setText(jobDedatils.getTitle());
-		((TextView) getView().findViewById(R.id.jobPublishedTxt)).setText(jobDedatils.getUpdateAt());
+		((TextView) getView().findViewById(R.id.jobTitleTxt))
+			.setText(jobDedatils.getTitle());
+		String date = Controller.getDateFormat(jobDedatils.getUpdateAt());
+		((TextView) getView().findViewById(R.id.jobPublishedTxt))
+			.setText(date);
 		((TextView) getView().findViewById(R.id.jobSalaryminTxt))
 			.setText(jobDedatils.getSalaryMin() + "$");
 		((TextView) getView().findViewById(R.id.jobSalarymaxTxt))
 			.setText(jobDedatils.getSalaryMax() + "$");
+		((TextView) getView().findViewById(R.id.jobLocationTxt))
+			.setText(jobDedatils.getLocation());
 		
 		ImageView img = (ImageView) getView().findViewById(R.id.markAsFavoriteImg);
 		img.setClickable(true);
@@ -64,24 +66,16 @@ public class JobDetailsFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				ImageView img = (ImageView) getView().findViewById(R.id.markAsFavoriteImg);
-				if (jobDedatils.isFavorite()) {
-					img.setImageResource(R.drawable.ic_unmark_as_favorite);
-					img.setContentDescription(getString(R.string.cd_unmarked_as_favorite));
-					jobDedatils.setFavorite(false);
-				} else {
-					img.setImageResource(R.drawable.ic_mark_as_favorite);
-					img.setContentDescription(getString(R.string.cd_marked_as_favorite));
-					jobDedatils.setFavorite(true);
-				}
 				
+				boolean isFavorite = Controller.getInstance()
+					.markJobAsFavorite(getActivity(), jobDedatils);
+				jobDedatils.setFavorite(isFavorite);
+				updateFavoriteImg(jobDedatils.isFavorite());
 			}
 		});
 		
-		if (jobDedatils.isFavorite()) {
-			img.setImageResource(R.drawable.ic_mark_as_favorite);
-			img.setContentDescription(getString(R.string.cd_marked_as_favorite));
-		}
+		updateFavoriteImg(Controller.getInstance()
+			.checkJobIsFavorite(getActivity(), jobDedatils.getJobId()));
 		
 		// Cargamos la información referente a la startup
 		FragmentManager fm = getFragmentManager();
@@ -96,6 +90,20 @@ public class JobDetailsFragment extends Fragment {
 		transaction.replace(R.id.startup_details_fragment, startupDetails);
 		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		transaction.commit();
-		
+	}
+	
+	/**
+	 * Modifica el icono de favorito en función del valor pasado por parámetro.
+	 * @param isFavorite
+	 */
+	public void updateFavoriteImg(boolean isFavorite) {
+		ImageView img = (ImageView) getView().findViewById(R.id.markAsFavoriteImg);
+		if (isFavorite) {
+			img.setImageResource(R.drawable.ic_marked_as_favorite);
+			img.setContentDescription(getString(R.string.cd_marked_as_favorite));
+		} else {
+			img.setImageResource(R.drawable.ic_unmarked_as_favorite);
+			img.setContentDescription(getString(R.string.cd_unmarked_as_favorite));
+		}
 	}
 }

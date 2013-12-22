@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import es.vicmonmena.jobper.Controller;
 import es.vicmonmena.jobper.R;
-import es.vicmonmena.jobper.model.Job;
-import es.vicmonmena.jobper.util.Jobper;
+import es.vicmonmena.jobper.model.Startup;
 
 /**
  * 
@@ -31,13 +29,21 @@ public class StartupDetailsFragment extends Fragment {
 	 * Cadena key de paso de dato entre activities.
 	 */
 	public static final String JOB_ID = "es.vicmonmena.jobper.model.job.id";
+	/**
+	 * 
+	 */
+	private StartupDetailsAsyncTask startupTask;
+	/**
+	 * 
+	 */
+	private LoadImageTask loadImageTask;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.i(TAG,"onCreateView");
 		View view = inflater.inflate(R.layout.startup_details, container, false);
-		new JobAsyncTask().execute(getArguments().getString(StartupDetailsFragment.JOB_ID));
+		startupTask = new StartupDetailsAsyncTask();
+		startupTask.execute(getArguments().getString(StartupDetailsFragment.JOB_ID));
 		return view;
 	}
 	
@@ -45,49 +51,38 @@ public class StartupDetailsFragment extends Fragment {
 	 * Async task para obtener la información de la Startup relacionada con el Job
 	 *
 	 */
-	private class JobAsyncTask extends AsyncTask<String, Void, Job> {
+	private class StartupDetailsAsyncTask extends AsyncTask<String, Void, Startup> {
 		
 		@Override
-		protected void onPreExecute() {
-			//view.findViewById(R.id.loadingJobDetailsLayout).setVisibility(View.VISIBLE);
-			//view.findViewById(R.id.startupJobDetailsLayout).setVisibility(View.GONE);
-			super.onPreExecute();
-		}
-		
-		@Override
-		protected Job doInBackground(String... params) {
+		protected Startup doInBackground(String... params) {
 			
-			Job job = null;
+			Startup startup = null;
 			if (params != null && params.length > 0) {
-				job = Controller.getInstance().loadJob(params[0]);
+				startup = Controller.getInstance().loadStartup(this, params[0]);
 			}
-			return job;
+			return startup;
 		}
 		
 		@Override
-		protected void onPostExecute(Job result) {
+		protected void onPostExecute(Startup result) {
 			
-			if (result != null) {
-				if (!TextUtils.isEmpty(result.getLocation())) {
-					((TextView) getView().findViewById(R.id.jobLocationTxt)).setText(result.getLocation());
-				}
-				if (!TextUtils.isEmpty(result.getStartup().getName())) {
-					((TextView) getView().findViewById(R.id.jobStartupTxt)).setText(result.getStartup().getName());
+			if (!isCancelled() && result != null) {
+				if (!TextUtils.isEmpty(result.getName())) {
+					((TextView) getView().findViewById(R.id.jobStartupTxt)).setText(result.getName());
 				}
 				
-				if (!TextUtils.isEmpty(result.getStartup().getProductDescription())) {
-					((TextView) getView().findViewById(R.id.jobProductDescTxt)).setText(result.getStartup().getProductDescription());
+				if (!TextUtils.isEmpty(result.getProductDescription())) {
+					((TextView) getView().findViewById(R.id.jobProductDescTxt)).setText(result.getProductDescription());
 				}
 				
-				if (!TextUtils.isEmpty(result.getStartup().getCompanyURL())) {
+				if (!TextUtils.isEmpty(result.getCompanyURL())) {
 					getView().findViewById(R.id.startupLogoImg)
-						.setTag((String)result.getStartup().getCompanyURL());
+						.setTag((String)result.getCompanyURL());
 				}
-				if (!TextUtils.isEmpty(result.getStartup().getLogoURL())) {
-					new LoadImageTask().execute(result.getStartup().getLogoURL());
+				if (!TextUtils.isEmpty(result.getLogoURL())) {
+					loadImageTask = new LoadImageTask();
+					loadImageTask.execute(result.getLogoURL());
 				}
-				//view.findViewById(R.id.loadingJobDetailsLayout).setVisibility(View.GONE);
-				//view.findViewById(R.id.startupJobDetailsLayout).setVisibility(View.VISIBLE);
 			}
 		}
 	}
@@ -110,11 +105,32 @@ public class StartupDetailsFragment extends Fragment {
         
         @Override
         protected void onPostExecute(Drawable result) {
-        	
-        	if (result != null) {
+        	if (!isCancelled() && result != null) {
         		((ImageView) getView().findViewById(R.id.startupLogoImg))
         		.setImageDrawable(result);
         	}
         }
 	}
+    
+    @Override
+    public void onDestroy() {
+    	cancelAllTask();
+    	super.onDestroy();
+    }
+    
+    @Override
+	public void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		cancelAllTask();
+	}
+    
+    private void cancelAllTask() {
+    	if (startupTask != null) {
+			startupTask.cancel(true);
+		}
+		if (loadImageTask != null) {
+			loadImageTask.cancel(true);
+		}
+    }
 }

@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import es.vicmonmena.jobper.Controller;
 import es.vicmonmena.jobper.R;
 import es.vicmonmena.jobper.model.Job;
 import es.vicmonmena.jobper.ui.DetailsActivity;
+import es.vicmonmena.jobper.ui.components.widget.JobAdapter;
 
 /**
  * 
@@ -28,6 +30,10 @@ public class JobsFragment extends ListFragment {
 	 */
 	private static final String TAG = "JobsFragment";
 	/**
+	 * Cadena key de paso de dato entre activities.
+	 */
+	public static final String FAVORITE_JOB_LIST = "es.vicmonmena.jobper.model.job.favorite_job_list";
+	/**
 	 * A true indica que trabajamos con un tablet.
 	 */
 	private boolean singleColumn = false;
@@ -35,6 +41,10 @@ public class JobsFragment extends ListFragment {
 	 * Adapter para el listado de Jobs
 	 */
 	private JobAdapter adapter;
+	/**
+	 * 
+	 */
+	private JobsAsyncTask jobsTask;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -46,8 +56,9 @@ public class JobsFragment extends ListFragment {
 		if (jobDetailsFragment == null) {
 			singleColumn = true;
 		}
-
-		new JobsAsyncTask().execute();
+		
+		jobsTask = new JobsAsyncTask();
+		jobsTask.execute();
 	}
 	
 	@Override
@@ -90,7 +101,7 @@ public class JobsFragment extends ListFragment {
 		
 		@Override
 		protected List<Job> doInBackground(Void... params) {
-			return Controller.getInstance().loadJobs();
+			return Controller.getInstance().loadJobs(this);
 		}
 		
 		@Override
@@ -100,5 +111,13 @@ public class JobsFragment extends ListFragment {
 			setListAdapter(adapter);
 			super.onPostExecute(result);
 		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		
+		jobsTask.cancel(true);
 	}
 }

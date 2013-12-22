@@ -29,11 +29,11 @@ public class Job implements Parcelable {
 	/**
 	 * 
 	 */
-	private String salaryMin;
+	private String salaryMin = "0";
 	/**
 	 * 
 	 */
-	private String salaryMax;
+	private String salaryMax = "0";
 	/**
 	 * 
 	 */
@@ -147,6 +147,7 @@ public class Job implements Parcelable {
 		dest.writeString(updateAt);
 		dest.writeString(salaryMin);
 		dest.writeString(salaryMax);
+		dest.writeString(location);
 		dest.writeByte((byte) (favorite ? 1 : 0));
 	}
 	
@@ -157,6 +158,7 @@ public class Job implements Parcelable {
 		updateAt = in.readString();
 	    salaryMin = in.readString();
 	    salaryMax = in.readString();
+	    location = in.readString();
 	    favorite = in.readByte() != 0;
     }
 	

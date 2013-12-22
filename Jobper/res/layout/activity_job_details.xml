@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:baselineAligned="false"
     android:padding="5dp" >
-
+    
     <TextView
         android:id="@+id/jobSalaryminTxt"
         android:layout_width="wrap_content"
@@ -15,22 +15,6 @@
         android:hint="@string/job_details_salarymin_hint"
         android:textColor="#c27ba0"
         android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/shareJobBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:background="#085394"
-        android:contentDescription="@string/share_job_details"
-        android:drawableLeft="@drawable/ic_action_share"
-        android:paddingLeft="5dp"
-        android:paddingRight="10dp"
-        android:text="@string/share_job_details"
-        android:textColor="#FFF"
-        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/TextView01"
@@ -83,17 +67,6 @@
         android:textColor="#c27ba0"
         android:textSize="16sp" />
 
-    <ImageView
-        android:id="@+id/markAsFavoriteImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/startup_details_fragment"
-        android:layout_marginRight="26dp"
-        android:contentDescription="@string/cd_unmarked_as_favorite"
-        android:onClick="onClickView"
-        android:src="@drawable/ic_unmark_as_favorite" />
-
     <TextView
         android:id="@+id/jobTitleTxt"
         style="@style/job_details_title_style"
@@ -101,9 +74,11 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/markAsFavoriteImg"
         android:layout_alignLeft="@+id/startup_details_fragment"
+        android:layout_alignRight="@+id/jobLocationTxt"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="21dp"
-        android:hint="@string/job_details_title_hint" />
+        android:hint="@string/job_details_title_hint"
+        android:maxWidth="280dp" />
 
     <TextView
         android:id="@+id/textView1"
@@ -115,5 +90,37 @@
         android:text="@string/job_details_published_lbl"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/TextView03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView02"
+        android:layout_below="@+id/TextView02"
+        android:text="@string/job_details_location_lbl"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/jobLocationTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextView03"
+        android:layout_alignBottom="@+id/TextView03"
+        android:layout_alignLeft="@+id/jobSalarymaxTxt"
+        android:hint="@string/job_details_location_hint"
+        android:textColor="#c27ba0"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/markAsFavoriteImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/startup_details_fragment"
+        android:layout_marginRight="25dp"
+        android:contentDescription="@string/cd_unmarked_as_favorite"
+        android:onClick="onClickView"
+        android:src="@drawable/ic_unmarked_as_favorite" />
 
 </RelativeLayout>
