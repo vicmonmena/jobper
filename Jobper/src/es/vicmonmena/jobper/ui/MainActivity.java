@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import es.vicmonmena.jobper.Controller;
 import es.vicmonmena.jobper.R;
 import es.vicmonmena.jobper.ui.components.FavoriteJobsFragment;
 import es.vicmonmena.jobper.ui.components.JobsFragment;
@@ -48,6 +49,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i(TAG, "onCreate");
+        
+        // Alarma para notificaciones
+        Controller.getInstance().setAlarm(this);
         
         // Definiendo pestañas de la action bar
         ActionBar actionBar = getActionBar();

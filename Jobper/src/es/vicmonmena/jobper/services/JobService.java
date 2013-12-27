@@ -1,98 +1,77 @@
 package es.vicmonmena.jobper.services;
 
-import android.app.Service;
+import android.app.IntentService;
 import android.content.Intent;
-import android.os.Binder;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
+import android.database.Cursor;
 import android.util.Log;
 import es.vicmonmena.jobper.Controller;
+import es.vicmonmena.jobper.database.util.DBConstants;
+import es.vicmonmena.jobper.model.Job;
 
 /**
- * Servicio encargado de realizar relacionadas con Jobs.
+ * Servicio encargado de consultar actualizaciones de jobs favoritos.
  * @author vicmonmena
  *
  */
-public class JobService extends Service{
+public class JobService extends IntentService{
 
+	public static final int NOTIFICATION_REQUEST_CODE = 1;
+	public static final String UPDATED_JOB = "es.vicmonmena.jobper.job.updated";
+	public static final String DELETED_JOB = "es.vicmonmena.jobper.job.deleted";
+	
 	/**
-	 * TAGpara los mensajes de log de est
+	 * TAG para los mensajes de log de esta clase.
 	 */
 	private static final String TAG = "JobService";
-	/**
-	 * Tipo de mensaje para actualizar la IU.
-	 */
-	public static final int UPDATE_UI = 1;
-	/**
-	 * 
-	 */
-	private final IBinder binder = new JobBinder();
-	/**
-	 * Envía mensajes a la Activity.
-	 */
-	private Messenger messenger;
-	/**
-	 * Set messenger
-	 * @param messenger
-	 */
-	public void setMessenger(Messenger messenger) {
-		this.messenger = messenger;
-	}
 	
-	@Override
-	public IBinder onBind(Intent intent) {
-		return binder;
+	public JobService() {
+		super("JobService");
 	}
 
-    public class JobBinder extends Binder {
-    	public JobService getService() {
-            return JobService.this;
-        }
-    }
-    
 	@Override
-	public void onCreate() {
-	}
-	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
-	
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		return START_STICKY;
-	}
-
-	/**
-	 * Comprueba si el Job con id pasado por parámetro está marcado como 
-	 * favorito, es decir, está registrado en bbdd.
-	 * @param jobId
-	 * @return
-	 */
-	public void checkIsFavorite(final String jobId) {
-		new Thread( new Runnable() {
+	protected void onHandleIntent(Intent intent) {
+		Log.i(TAG, "onHandleIntent");
+		
+		Intent bIntent = new Intent(getApplicationContext(), JobAlarmReceiver.class);
+		bIntent.setAction("es.vicmonmena.openuax.notify");
+		
+		Cursor cursor  = Controller.getInstance().loadFavoriteJobs(getApplication());
+		boolean jobUpdated = false;
+		Job job =  null;
+		
+		// Comprobamos si hay algún JOB de mis favoritos actualizado
+		while (!jobUpdated && cursor.moveToNext()) {
 			
-			@Override
-			public void run() {
-				
-				boolean isFavorite = Controller.getInstance()
-					.checkJobIsFavorite(getApplication(), jobId);
-				if (isFavorite) {
-					sendMessage();
+			String jobId = cursor.getString(cursor.getColumnIndex(DBConstants.JOB_ID));
+			String updatedAt = cursor.getString(cursor.getColumnIndex(DBConstants.UPDATE_AT));
+			String title = cursor.getString(cursor.getColumnIndex(DBConstants.TITLE));
+			
+			job = Controller.getInstance().loadJob(jobId);
+			
+			if (job != null) {
+				if (!job.getUpdateAt().equals(updatedAt)) {
+					bIntent.putExtra(UPDATED_JOB, job);
+					jobUpdated = true;
 				}
+			} else {
+				// Ya no existe el job => Eliminamos de favoritos
+				job = new Job();
+				job.setJobId(jobId);
+				job.setTitle(title);
+				job.setFavorite(false);
+				
+				Controller.getInstance().markJobAsFavorite(
+					getApplicationContext(), job);
+				
+				// Datos del JOB para notificar al usuario
+				bIntent.putExtra(DELETED_JOB, job);
+				jobUpdated = true;
 			}
-		}).start();
-	}
-	
-	private void sendMessage() {
-		try {
-			Message msg = Message.obtain(null, UPDATE_UI);
-			messenger.send(msg);
-		} catch (RemoteException e) {
-			Log.i(TAG, "RemoteException");
+		}
+		cursor.close();
+		
+		if (jobUpdated) {
+			sendBroadcast(bIntent);
 		}
 	}
 }

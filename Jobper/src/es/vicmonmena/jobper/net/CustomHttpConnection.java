@@ -44,7 +44,7 @@ public class CustomHttpConnection {
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("GET");
 		is = connection.getInputStream();
-		Log.e(TAG, "Response code " + connection.getResponseCode());
+		Log.i(TAG, "Response code " + connection.getResponseCode());
     	
     	return is;
     }

@@ -31,6 +31,11 @@
             android:name=".database.JobProvider"
             android:authorities="es.vicmonmena.jobper.job"
             android:multiprocess="true"/>
+        <receiver android:name=".services.JobAlarmReceiver">
+            <intent-filter >
+                <action android:name="es.vicmonmena.openuax.notify"/>
+            </intent-filter>
+         </receiver>
     </application>
 
 </manifest>

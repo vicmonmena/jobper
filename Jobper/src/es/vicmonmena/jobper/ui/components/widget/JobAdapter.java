@@ -3,7 +3,6 @@ package es.vicmonmena.jobper.ui.components.widget;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,6 @@ public class JobAdapter extends ArrayAdapter<Job>{
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		Log.e("JobAdapter", jobs.get(position).getTitle());
 		holder.jobTitleTextView.setText(jobs.get(position).getTitle());
 		String date = Controller.getDateFormat(jobs.get(position).getUpdateAt());
 		holder.jobDateTextView.setText(date);

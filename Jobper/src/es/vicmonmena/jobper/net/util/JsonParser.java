@@ -61,6 +61,7 @@ public class JsonParser {
 						} else {
 							if (node.equals("id")) {
 								job.setJobId(reader.nextString());
+								Log.i(TAG, "parseJob " + job.getJobId());
 							} else if (node.equals("title")) {
 								job.setTitle(reader.nextString());
 							}  else if (node.equals("updated_at")) {
@@ -101,13 +102,80 @@ public class JsonParser {
 				reader.endArray();
 			}
 		} catch (IOException e) {
-			Log.i(TAG, "IOException parsing Json...");
+			Log.i(TAG, "IOException parsing Json (parseJobs)");
 		} catch (Exception e) {
-			Log.i(TAG, "Exception parsing Json...");
+			Log.i(TAG, "Exception parsing Json (parseJobs)");
 		} finally {
 			reader.close();
 		}
 		return jobs;
+	}
+	
+	/**
+	 * Obtiene un Job a partir de una fuente con formato Json.
+	 * @param is
+	 * @return
+	 * @throws IOException
+	 */
+	public static Job parseJob(InputStream is) throws IOException {
+		JsonReader reader = new JsonReader(new InputStreamReader(is, "UTF-8"));
+		Job job = null;
+		try {
+			while (reader.hasNext()) {
+				reader.beginObject();
+				job = new Job();
+				while (reader.hasNext()) {
+					String node = reader.nextName();
+					if (reader.peek() == JsonToken.NULL) {
+						reader.skipValue();
+					} else {
+						if (node.equals("id")) {
+							job.setJobId(reader.nextString());
+							Log.i(TAG, "parseJob " + job.getJobId());
+						} else if (node.equals("title")) {
+							job.setTitle(reader.nextString());
+						}  else if (node.equals("updated_at")) {
+							job.setUpdateAt(reader.nextString());
+						} else if (node.equals("salary_min")) {
+							job.setSalaryMin(reader.nextString());
+						} else if (node.equals("salary_max")) {
+							job.setSalaryMax(reader.nextString());
+						} else if (node.equals("tags")) {
+							reader.beginArray();
+							while (reader.hasNext()) {
+								boolean isLocationTagType = false;
+								reader.beginObject();
+								while (reader.hasNext()) {
+									node = reader.nextName();
+									if (node.equals("tag_type")) {
+										if (reader.nextString().equals("LocationTag")) {
+											isLocationTagType = true;
+										}
+									} else if (isLocationTagType && node.equals("display_name")) {
+										job.setLocation(reader.nextString());
+										isLocationTagType = false;
+									} else {
+										reader.skipValue();
+									}
+								}
+								reader.endObject();
+							}
+							reader.endArray();
+						} else {
+							reader.skipValue();
+						}
+					}
+				}
+				reader.endObject();
+			}
+		} catch (IOException e) {
+			Log.i(TAG, "IOException parsing Json (parseJob)");
+		} catch (Exception e) {
+			Log.i(TAG, "Exception parsing Json (parseJob)");
+		} finally {
+			reader.close();
+		}
+		return job;
 	}
 	
 	/**

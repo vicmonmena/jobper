@@ -25,6 +25,7 @@ import es.vicmonmena.jobper.model.Startup;
 import es.vicmonmena.jobper.net.CustomHttpConnection;
 import es.vicmonmena.jobper.net.util.JsonParser;
 import es.vicmonmena.jobper.net.util.NETConstants;
+import es.vicmonmena.jobper.services.JobAlarm;
 
 /**
  * Clase controlador del Patrón de diseño MVC.
@@ -42,6 +43,10 @@ public class Controller {
 	 * Controller class instace. Singleton pattern.
 	 */
 	private static Controller controller;
+	/**
+	 * Alrma para notificaciones.
+	 */
+	private JobAlarm jAlarm;
 	/**
 	 * Controller class constructor. Singleton patter.
 	 */
@@ -72,10 +77,29 @@ public class Controller {
 			is = CustomHttpConnection.customGetRequest(NETConstants.URI_JOBS + "?" + NETConstants.PARAM_PER_PAGE + "20");
 			jobs = JsonParser.parseJobs(task, is);
 		} catch (IOException e) {
-			Log.e(TAG, "Exception in searchAngelListUser");
+			Log.e(TAG, "Exception in loadJobs");
 		}
 		
 		return jobs;
+	}
+	
+	/**
+	 * Devuelve una lista de Jobs del servicio en Internet.
+	 * @return lista de Jobs.
+	 */
+	public Job loadJob(String jobId) {
+		
+		Job job = null;
+		
+		InputStream is =  null;
+		try {
+			is = CustomHttpConnection.customGetRequest(NETConstants.URI_JOBS + "/" + jobId);
+			job = JsonParser.parseJob(is);
+		} catch (IOException e) {
+			Log.e(TAG, "Exception in loadJob");
+		}
+		
+		return job;
 	}
 	
 	/**
@@ -92,7 +116,7 @@ public class Controller {
 			is = CustomHttpConnection.customGetRequest(NETConstants.URI_JOBS + "/" + id);
 			startup = JsonParser.parseStartup(task, is);
 		} catch (IOException e) {
-			Log.e(TAG, "Exception in searchAngelListUser");
+			Log.e(TAG, "Exception in loadStartup");
 		}
 		
 		return startup;
@@ -207,5 +231,44 @@ public class Controller {
 	      Log.e(TAG, "Error formating date...");
 	    }
 	    return outputFormat.format(parsed);
+	}
+	
+	/**
+	 * Obtiene una objeto Date de un String con una fecha con formato 
+	 * yyyy-MM-ddTHH:mm:ssZ
+	 * @param date
+	 * @return
+	 */
+	public static Date getDateFromString(String dateString) {
+		Date date = null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		try {
+			date = format.parse(dateString);  
+		} catch (ParseException e) {  
+			Log.e(TAG, "Error formating date...");
+		}
+	    return date;
+	}
+	
+	/**
+	 * Comprueba si una fecha es distinta a otra
+	 * @param dateIn
+	 * @param dateOut
+	 * @return
+	 */
+	public static boolean compareDateChanges(Date dateIn, Date dateOut) {
+		return false;
+	}
+	
+	/**
+	 * Crea una alarm
+	 * @param context
+	 */
+	public void setAlarm(Context context) {
+		if (jAlarm == null) {
+			Log.i(TAG,"CREATING ALARM");
+			jAlarm = new JobAlarm(context);
+			jAlarm.startAlarm();
+		}
 	}
 }

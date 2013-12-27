@@ -40,4 +40,7 @@
     
     <string name="msg_new_job_offer">New job offer</string>
     <string name="msg_from_jobper">from #jobper</string>
+    
+    <string name="notification_update">A favorite job has been updated!</string>
+    <string name="notification_delete">A favorite job has been deleted!</string>
 </resources>
