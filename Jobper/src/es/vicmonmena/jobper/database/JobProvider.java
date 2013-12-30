@@ -95,6 +95,7 @@ public class JobProvider extends ContentProvider {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		int numAffectedRows = db.delete(DBConstants.JOB_TABLE_NAME, selection, selectionArgs);
 		if (numAffectedRows > 0){
+			notifyChange(uri);
 		}
 		return numAffectedRows;
 	}
@@ -109,6 +110,7 @@ public class JobProvider extends ContentProvider {
 		
 		if (id >= 0){
 			result = ContentUris.withAppendedId(CONTENT_URI, id);
+			notifyChange(result);
 		}
 		
 		return result;
@@ -117,7 +119,18 @@ public class JobProvider extends ContentProvider {
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		
+		int numAffectedRows = db.update(DBConstants.JOB_TABLE_NAME, values, 
+			selection, selectionArgs);
+		
+		if (numAffectedRows > 0){
+			notifyChange(uri);
+		}
+		return numAffectedRows;
 	}
+	
+	protected void notifyChange(Uri uri) {
+        getContext().getContentResolver().notifyChange(uri, null);
+    }
 }

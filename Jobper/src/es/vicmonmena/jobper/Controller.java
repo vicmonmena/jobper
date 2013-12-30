@@ -187,6 +187,33 @@ public class Controller {
 		return markedAs;
 	}
 	
+	/**
+	 * Marca/desmarca un empleo como favorito.
+	 * @param context
+	 * @param job
+	 * @return true if is marked as favorite, false if is unmarked as famorite.
+	 */
+	public boolean updateFavoriteJob(Context context, Job job) {
+		boolean markedAs = false;
+		ContentResolver cr = context.getContentResolver();
+		
+		if (!job.isFavorite()) {
+			ContentValues values = new ContentValues(1);
+			
+			values.put(DBConstants.JOB_ID, job.getJobId());
+			values.put(DBConstants.TITLE, job.getTitle());
+			values.put(DBConstants.UPDATE_AT, job.getUpdateAt());
+			values.put(DBConstants.SALARY_MIN, job.getSalaryMin());
+			values.put(DBConstants.SALARY_MAX, job.getSalaryMax());
+			values.put(DBConstants.LOCATION, job.getLocation());
+			
+			cr.update(JobProvider.CONTENT_URI, values, 
+					DBConstants.JOB_ID + " = " + DBConstants.JOB_ID, null);
+		}
+		
+		return markedAs;
+	}
+	
 	public boolean checkJobIsFavorite(Context context, String jobId) {
 		ContentResolver cr = context.getContentResolver();
 		Uri uri = Uri.parse(JobProvider.CONTENT_URI + "/" + jobId);
@@ -199,7 +226,7 @@ public class Controller {
 	 * @param context
 	 */
 	public void shareJob(Context context, Job job) {
-    	Log.i(TAG, "Sharing job...");
+    	Log.d(TAG, "Sharing job...");
     	StringBuilder text = new StringBuilder();
     	text.append(context.getString(R.string.msg_new_job_offer));
     	text.append(": ");
@@ -266,9 +293,8 @@ public class Controller {
 	 */
 	public void setAlarm(Context context) {
 		if (jAlarm == null) {
-			Log.i(TAG,"CREATING ALARM");
 			jAlarm = new JobAlarm(context);
-			jAlarm.startAlarm();
+			jAlarm.startAlarmService();
 		}
 	}
 }

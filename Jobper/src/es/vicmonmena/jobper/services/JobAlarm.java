@@ -14,28 +14,22 @@ import android.content.Intent;
  */
 public class JobAlarm {
 
+	/**
+	 * 
+	 */
 	private Context context;
 	
+	/**
+	 * 
+	 * @param context
+	 */
 	public JobAlarm(Context context) {
 		this.context = context;
 	}
 	
-	public void startAlarm() {
-		
-		Intent bIntent = new Intent(context, JobAlarmReceiver.class);
-		PendingIntent pIntent = PendingIntent.getBroadcast(
-			context, 0, bIntent, PendingIntent.FLAG_CANCEL_CURRENT); 
-		
-		Calendar cal = Calendar.getInstance();
-		
-		int interval = 1000*60;
-		
-		AlarmManager alarm = (AlarmManager) 
-			context.getSystemService(Context.ALARM_SERVICE);
-		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + interval, 
-			interval, pIntent);
-	}
-	
+	/**
+	 * Crea e inicializa una alarma que activará el servicio a diario.
+	 */
 	public void startAlarmService() {
 		
 		Intent serviceIntent = new Intent(context, JobService.class);

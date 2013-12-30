@@ -24,23 +24,24 @@ public class JobService extends IntentService{
 	 */
 	private static final String TAG = "JobService";
 	
+	/**
+	 * 
+	 */
 	public JobService() {
 		super("JobService");
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.i(TAG, "onHandleIntent");
-		
+		Log.i(TAG, "Cheking changes in favoritres...");
 		Intent bIntent = new Intent(getApplicationContext(), JobAlarmReceiver.class);
 		bIntent.setAction("es.vicmonmena.openuax.notify");
 		
 		Cursor cursor  = Controller.getInstance().loadFavoriteJobs(getApplication());
-		boolean jobUpdated = false;
 		Job job =  null;
 		
 		// Comprobamos si hay algún JOB de mis favoritos actualizado
-		while (!jobUpdated && cursor.moveToNext()) {
+		while (cursor.moveToNext()) {
 			
 			String jobId = cursor.getString(cursor.getColumnIndex(DBConstants.JOB_ID));
 			String updatedAt = cursor.getString(cursor.getColumnIndex(DBConstants.UPDATE_AT));
@@ -50,8 +51,14 @@ public class JobService extends IntentService{
 			
 			if (job != null) {
 				if (!job.getUpdateAt().equals(updatedAt)) {
+					
+					// Marca como favorito y actualiza los nuevos datos en BBDD
+					job.setFavorite(true);
+					Controller.getInstance().updateFavoriteJob(getApplicationContext(), job);
+					
+					// Datos del JOB para notificar al usuario
 					bIntent.putExtra(UPDATED_JOB, job);
-					jobUpdated = true;
+					break;
 				}
 			} else {
 				// Ya no existe el job => Eliminamos de favoritos
@@ -63,15 +70,11 @@ public class JobService extends IntentService{
 				Controller.getInstance().markJobAsFavorite(
 					getApplicationContext(), job);
 				
-				// Datos del JOB para notificar al usuario
 				bIntent.putExtra(DELETED_JOB, job);
-				jobUpdated = true;
+				break;
 			}
 		}
 		cursor.close();
-		
-		if (jobUpdated) {
-			sendBroadcast(bIntent);
-		}
+		sendBroadcast(bIntent);
 	}
 }

@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
-import es.vicmonmena.jobper.Controller;
 import es.vicmonmena.jobper.model.Job;
 import es.vicmonmena.jobper.model.Startup;
 
@@ -61,7 +60,7 @@ public class JsonParser {
 						} else {
 							if (node.equals("id")) {
 								job.setJobId(reader.nextString());
-								Log.i(TAG, "parseJob " + job.getJobId());
+								Log.d(TAG, "parseJob " + job.getJobId());
 							} else if (node.equals("title")) {
 								job.setTitle(reader.nextString());
 							}  else if (node.equals("updated_at")) {
@@ -121,53 +120,52 @@ public class JsonParser {
 		JsonReader reader = new JsonReader(new InputStreamReader(is, "UTF-8"));
 		Job job = null;
 		try {
+			reader.beginObject();
+			job = new Job();
 			while (reader.hasNext()) {
-				reader.beginObject();
-				job = new Job();
-				while (reader.hasNext()) {
-					String node = reader.nextName();
-					if (reader.peek() == JsonToken.NULL) {
-						reader.skipValue();
-					} else {
-						if (node.equals("id")) {
-							job.setJobId(reader.nextString());
-							Log.i(TAG, "parseJob " + job.getJobId());
-						} else if (node.equals("title")) {
-							job.setTitle(reader.nextString());
-						}  else if (node.equals("updated_at")) {
-							job.setUpdateAt(reader.nextString());
-						} else if (node.equals("salary_min")) {
-							job.setSalaryMin(reader.nextString());
-						} else if (node.equals("salary_max")) {
-							job.setSalaryMax(reader.nextString());
-						} else if (node.equals("tags")) {
-							reader.beginArray();
+				String node = reader.nextName();
+				if (reader.peek() == JsonToken.NULL) {
+					reader.skipValue();
+				} else {
+					if (node.equals("id")) {
+						job.setJobId(reader.nextString());
+						Log.d(TAG, "parseJob " + job.getJobId());
+					} else if (node.equals("title")) {
+						job.setTitle(reader.nextString());
+					}  else if (node.equals("updated_at")) {
+						job.setUpdateAt(reader.nextString());
+					} else if (node.equals("salary_min")) {
+						job.setSalaryMin(reader.nextString());
+					} else if (node.equals("salary_max")) {
+						job.setSalaryMax(reader.nextString());
+					} else if (node.equals("tags")) {
+						reader.beginArray();
+						while (reader.hasNext()) {
+							boolean isLocationTagType = false;
+							reader.beginObject();
 							while (reader.hasNext()) {
-								boolean isLocationTagType = false;
-								reader.beginObject();
-								while (reader.hasNext()) {
-									node = reader.nextName();
-									if (node.equals("tag_type")) {
-										if (reader.nextString().equals("LocationTag")) {
-											isLocationTagType = true;
-										}
-									} else if (isLocationTagType && node.equals("display_name")) {
-										job.setLocation(reader.nextString());
-										isLocationTagType = false;
-									} else {
-										reader.skipValue();
+								node = reader.nextName();
+								if (node.equals("tag_type")) {
+									if (reader.nextString().equals("LocationTag")) {
+										isLocationTagType = true;
 									}
+								} else if (isLocationTagType && node.equals("display_name")) {
+									job.setLocation(reader.nextString());
+									isLocationTagType = false;
+								} else {
+									reader.skipValue();
 								}
-								reader.endObject();
 							}
-							reader.endArray();
-						} else {
-							reader.skipValue();
+							reader.endObject();
 						}
+						reader.endArray();
+					} else {
+						reader.skipValue();
 					}
 				}
-				reader.endObject();
 			}
+			reader.endObject();
+			
 		} catch (IOException e) {
 			Log.i(TAG, "IOException parsing Json (parseJob)");
 		} catch (Exception e) {

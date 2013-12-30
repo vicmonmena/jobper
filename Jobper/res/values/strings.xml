@@ -5,7 +5,9 @@
     
     <string name="action_jobs">Jobs</string>
     <string name="action_favorites">Favorites</string>
-    <string name="action_info">Jobper is a job finder mobile client based on AngelList platform and developed by @vicmonmena</string>
+    <string name="action_info">Info</string>
+    <string name="action_info_text">Jobper is a job finder mobile client based on AngelList platform and developed by @vicmonmena</string>
+    <string name="action_notification_config">Notification</string>
     <string name="action_share">Share</string>
 
     <string name="job_title_hint">No title</string>
@@ -41,6 +43,10 @@
     <string name="msg_new_job_offer">New job offer</string>
     <string name="msg_from_jobper">from #jobper</string>
     
-    <string name="notification_update">A favorite job has been updated!</string>
-    <string name="notification_delete">A favorite job has been deleted!</string>
+    <string name="notification_update">A favorite Job has been updated!</string>
+    <string name="notification_delete">A favorite Job has been deleted!</string>
+    <string name="notification_no_changes">Your favorite Jobs are waiting for you!</string>
+    <string name="notification_no_changes_content">Take a look to your favorite Jobs!</string>
+    
+    <string name="notification_config_dialog_title">How often do you want to check your favorite Jobs states?</string>
 </resources>

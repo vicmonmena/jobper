@@ -4,10 +4,8 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -28,27 +26,14 @@ public class MainActivity extends Activity {
 	 */
 	private static final String TAG = "MainActivity";
 	/**
-	 * Fragment contenedor de la lista de Jobs completa.
+	 * Indicador del TAB de la ActionBar que está marcado.
 	 */
-	private JobsFragment jobsFragment;
-	/**
-	 * Fragment contenedor de la lista de Jobs msarcados como favoritos. 
-	 */
-	private FavoriteJobsFragment favJobsFragment;
-	/**
-	 * 
-	 */
-	private static final String CURRENT_TAB_INDEX = "CURRENT_TAB_INDEX";
-	/**
-	 * 
-	 */
-	private static final String CURRENT_FRAGMENT_STATE = "CURRENT_FRAGMENT_STATE";
-			
+	public static final String CURRENT_TAB_INDEX = "CURRENT_TAB_INDEX";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i(TAG, "onCreate");
         
         // Alarma para notificaciones
         Controller.getInstance().setAlarm(this);
@@ -67,9 +52,14 @@ public class MainActivity extends Activity {
         tabFavorites.setIcon(R.drawable.action_favorites);
         tabFavorites.setTabListener(new JobperTabListener<FavoriteJobsFragment>(
         	this, "favorites", FavoriteJobsFragment.class));
-        
+
         actionBar.addTab(tabJobs, true);
         actionBar.addTab(tabFavorites, false);
+
+        if (getIntent().hasExtra(CURRENT_TAB_INDEX)) {
+	        getActionBar().selectTab(getActionBar().getTabAt(
+	        	getIntent().getIntExtra(CURRENT_TAB_INDEX, 0)));
+        }
     }
 
     
@@ -83,8 +73,11 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+        	case R.id.action_notification_config:
+				Toast.makeText(this, "Under construction", Toast.LENGTH_SHORT).show();
+				return true;
 			case R.id.action_info:
-				Toast.makeText(this, getString(R.string.action_info), Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, getString(R.string.action_info_text), Toast.LENGTH_LONG).show();
 				return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -99,11 +92,29 @@ public class MainActivity extends Activity {
      */
     public static class JobperTabListener<T extends Fragment> implements ActionBar.TabListener {
 
+    	/**
+    	 * 
+    	 */
     	private Fragment mFragment;
+    	/**
+    	 * 
+    	 */
         private final Activity mActivity;
+        /**
+         * 
+         */
         private final String mTag;
+        /**
+         * 
+         */
         private final Class<T> mClass;
         
+        /**
+         * 
+         * @param activity
+         * @param tag
+         * @param clz
+         */
     	public JobperTabListener(Activity activity, String tag, Class<T> clz) {
     		this.mActivity = activity;
     		this.mTag = tag;
@@ -112,19 +123,17 @@ public class MainActivity extends Activity {
     	
 		@Override
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-			
+			// no hacer nada
 		}
 
 		@Override
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
 			mFragment = mActivity.getFragmentManager().findFragmentByTag(mTag);
-			// Check if the fragment is already initialized
+			// Comprobando si ya sehan inicializado fragments
 	        if (mFragment == null) {
-	            // If not, instantiate and add it to the activity
 	            mFragment = Fragment.instantiate(mActivity, mClass.getName());
 	            ft.add(R.id.jobs_fragment, mFragment, mTag);
 	        } else {
-	            // If it exists, simply attach it in order to show it
 	            ft.attach(mFragment);
 	        }
 		}
@@ -132,7 +141,6 @@ public class MainActivity extends Activity {
 		@Override
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 			if (mFragment != null) {
-	            // Detach the fragment, because another one is being attached
 	            ft.detach(mFragment);
 	        }
 		}
@@ -141,7 +149,6 @@ public class MainActivity extends Activity {
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-    	// TODO Auto-generated method stub
     	super.onSaveInstanceState(outState);
     	
     	outState.putInt(MainActivity.CURRENT_TAB_INDEX, 
@@ -150,7 +157,6 @@ public class MainActivity extends Activity {
     
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-    	// TODO Auto-generated method stub
     	super.onRestoreInstanceState(savedInstanceState);
     	
     	if (savedInstanceState != null) {

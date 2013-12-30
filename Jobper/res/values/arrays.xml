@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="sample_jobs_array">
-        <item>Android Engineer</item>
-        <item>PHP / CSS / JavaScript </item>
-        <item>Graphic Designer</item>
-        <item>Junior Front-End Developer</item>
+    <string-array name="notification_cheking_periods">
+        <item>One per hour</item>
+        <item>One per day</item>
+        <item>One per week </item>
+        <item>One per month</item>
     </string-array>
 </resources>
