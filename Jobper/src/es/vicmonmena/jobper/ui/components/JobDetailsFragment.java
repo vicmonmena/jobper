@@ -87,6 +87,8 @@ public class JobDetailsFragment extends Fragment {
 		transaction.replace(R.id.startup_details_fragment, startupDetails);
 		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		transaction.commit();
+		
+		((TextView) getView().findViewById(R.id.jobTitleTxt)).requestFocus();
 	}
 	
 	/**

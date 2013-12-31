@@ -68,7 +68,7 @@ public class DetailsActivity extends Activity {
         		Controller.getInstance().shareJob(this, jobDedatils);
 				return true;
 			case R.id.action_info:
-				Toast.makeText(this, getString(R.string.action_info), Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, getString(R.string.action_info_text), Toast.LENGTH_SHORT).show();
 				return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -87,7 +87,7 @@ public class DetailsActivity extends Activity {
 					Intent.ACTION_VIEW, Uri.parse((String)view.getTag()));
 				startActivity(browserIntent);
 			} else {
-				Toast.makeText(DetailsActivity.this, getString(R.string.msg_uri_not_found), Toast.LENGTH_SHORT).show();
+				Toast.makeText(DetailsActivity.this, getString(R.string.msg_uri_not_found), Toast.LENGTH_LONG).show();
 			}
 			break;
 		default:
