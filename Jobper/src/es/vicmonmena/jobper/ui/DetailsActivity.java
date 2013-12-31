@@ -37,7 +37,7 @@ public class DetailsActivity extends Activity {
         super.onCreate(savedInstanceState);
         
         getActionBar().setDisplayShowHomeEnabled(true);
-        
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         jobDetailsFragment = new JobDetailsFragment();
         jobDetailsFragment.setArguments(getIntent().getExtras());
         FragmentManager fm = getFragmentManager();
