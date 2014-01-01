@@ -13,10 +13,12 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import es.vicmonmena.jobper.database.JobProvider;
 import es.vicmonmena.jobper.database.util.DBConstants;
@@ -26,6 +28,7 @@ import es.vicmonmena.jobper.net.CustomHttpConnection;
 import es.vicmonmena.jobper.net.util.JsonParser;
 import es.vicmonmena.jobper.net.util.NETConstants;
 import es.vicmonmena.jobper.services.JobAlarm;
+import es.vicmonmena.jobper.ui.JobperPreferences;
 
 /**
  * Clase controlador del Patrón de diseño MVC.
@@ -68,13 +71,18 @@ public class Controller {
 	 * Devuelve una lista de Jobs del servicio en Internet.
 	 * @return lista de Jobs.
 	 */
-	public List<Job> loadJobs(AsyncTask task) {
+	public List<Job> loadJobs(Context context, AsyncTask task) {
 		
 		List<Job> jobs = null;
 		
 		InputStream is =  null;
 		try {
-			is = CustomHttpConnection.customGetRequest(NETConstants.URI_JOBS + "?" + NETConstants.PARAM_PER_PAGE + "20");
+			SharedPreferences sharedPref = PreferenceManager
+					.getDefaultSharedPreferences(context);
+				int jobsPerPage = Integer.parseInt(sharedPref.getString(
+					JobperPreferences.JOBS_PER_PAGE_KEY, "50"));
+			is = CustomHttpConnection.customGetRequest(NETConstants.URI_JOBS + 
+				"?" + NETConstants.PARAM_PER_PAGE + jobsPerPage);
 			jobs = JsonParser.parseJobs(task, is);
 		} catch (IOException e) {
 			Log.e(TAG, "Exception in loadJobs");
@@ -291,10 +299,21 @@ public class Controller {
 	 * Crea una alarm
 	 * @param context
 	 */
-	public void setAlarm(Context context) {
+	public void setAlarm(Context context, int interval) {
+		Log.d(TAG, "Setting alarm: " + interval + " seconds");
 		if (jAlarm == null) {
 			jAlarm = new JobAlarm(context);
-			jAlarm.startAlarmService();
+			jAlarm.startAlarmService(interval);
 		}
+	}
+	
+	/**
+	 * Crea una alarm
+	 * @param context
+	 */
+	public void resetAlarm(Context context, int interval) {
+		Log.d(TAG, "Setting alarm: " + interval + " seconds");
+		jAlarm = new JobAlarm(context);
+		jAlarm.startAlarmService(interval);
 	}
 }

@@ -1,0 +1,31 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory 
+        android:title="@string/notification_category_title"
+        android:key="notification_settings">
+        
+        <ListPreference
+	        android:key="notification_frequency_options"
+	        android:title="@string/notification_config_title"
+	        android:summary="@string/notification_config_summary"
+	        android:dialogTitle="@string/notification_config_dialog_title"
+	        android:entries="@array/notification_cheking_periods_entries"
+	        android:entryValues="@array/notification_cheking_periods_values"
+	        android:defaultValue="60" 
+	        android:persistent="true"
+	        />
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/jobs_category_title"
+        android:key="jobs_settings">
+        <ListPreference
+            android:key="jobs_per_page"
+            android:title="@string/jobs_config_title"
+            android:summary="@string/jobs_config_summary"
+            android:dialogTitle="@string/jobs_config_dialog_title"
+            android:entries="@array/jobs_per_page_entries"
+            android:entryValues="@array/jobs_per_page_values"
+            android:defaultValue="50" 
+            android:persistent="true"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

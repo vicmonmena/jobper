@@ -98,7 +98,7 @@ public class JobsFragment extends ListFragment {
 		
 		@Override
 		protected List<Job> doInBackground(Void... params) {
-			return Controller.getInstance().loadJobs(this);
+			return Controller.getInstance().loadJobs(getActivity(), this);
 		}
 		
 		@Override

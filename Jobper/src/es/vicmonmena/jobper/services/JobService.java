@@ -33,7 +33,7 @@ public class JobService extends IntentService{
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.i(TAG, "Cheking changes in favoritres...");
+		Log.i(TAG, "Cheking changes in favorites...");
 		Intent bIntent = new Intent(getApplicationContext(), JobAlarmReceiver.class);
 		bIntent.setAction("es.vicmonmena.openuax.notify");
 		

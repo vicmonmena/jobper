@@ -48,5 +48,15 @@
     <string name="notification_no_changes">Your favorite Jobs are waiting for you!</string>
     <string name="notification_no_changes_content">Take a look to your favorite Jobs!</string>
     
-    <string name="notification_config_dialog_title">How often do you want to check your favorite Jobs states?</string>
+    <!-- preferences -->
+    <string name="notification_category_title">Notifications</string>
+    <string name="notification_config_summary">How often do you want to check the state of your favorite Jobs?</string>
+    <string name="notification_config_dialog_title">Select frequency</string>
+    <string name="notification_config_title">Checking Frequency</string>
+    
+    <string name="jobs_category_title">Jobs</string>
+    <string name="jobs_config_summary">How many Jobs do you want to list?</string>
+    <string name="jobs_config_dialog_title">Select a number of Jobs</string>
+    <string name="jobs_config_title">Number of Jobs</string>
+    
 </resources>

@@ -5,7 +5,10 @@ import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -35,8 +38,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        
+		
         // Alarma para notificaciones
-        Controller.getInstance().setAlarm(this);
+        SharedPreferences sharedPref = PreferenceManager
+        	.getDefaultSharedPreferences(this);
+		int interval = Integer.parseInt(
+			sharedPref.getString(JobperPreferences.NOTIFICATION_KEY, "60"));
+        Controller.getInstance().setAlarm(this, interval);
         
         // Definiendo pestañas de la action bar
         ActionBar actionBar = getActionBar();
@@ -74,7 +83,8 @@ public class MainActivity extends Activity {
 
         switch (item.getItemId()) {
         	case R.id.action_notification_config:
-				Toast.makeText(this, "Under construction", Toast.LENGTH_SHORT).show();
+        		Intent i = new Intent(this, JobperPreferences.class);
+        		startActivity(i);
 				return true;
 			case R.id.action_info:
 				Toast.makeText(this, getString(R.string.action_info_text), Toast.LENGTH_LONG).show();
