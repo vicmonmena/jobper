@@ -38,8 +38,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        
-		
         // Alarma para notificaciones
         SharedPreferences sharedPref = PreferenceManager
         	.getDefaultSharedPreferences(this);

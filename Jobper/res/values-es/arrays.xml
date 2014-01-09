@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="notification_cheking_periods_entries">
-        <item>One per minute</item>
-        <item>One per hour</item>
-        <item>One per day</item>
-        <item>One per week</item>
+        <item>Una por minuto</item>
+        <item>Una por hora</item>
+        <item>Una por día</item>
+        <item>Una por semana</item>
     </string-array>
     <string-array name="notification_cheking_periods_values">
         <item>60</item>
@@ -13,9 +13,9 @@
         <item>604800</item>
     </string-array>
     <string-array name="jobs_per_page_entries">
-        <item>Last 10 jobs</item>
-        <item>Last 20 jobs</item>
-        <item>Last 50 jobs</item>
+        <item>Últimos 10 jobs</item>
+        <item>Últimos 20 jobs</item>
+        <item>Últimos 50 jobs</item>
     </string-array>
     <string-array name="jobs_per_page_values">
         <item>10</item>

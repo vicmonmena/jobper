@@ -71,6 +71,18 @@ public class JobDetailsFragment extends Fragment {
 			}
 		});
 		
+		ImageView imgShare = (ImageView) getView().findViewById(R.id.shareJobImgView);
+		if (imgShare != null) {
+			imgShare.setClickable(true);
+			imgShare.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					Controller.getInstance().shareJob(getActivity(), jobDedatils);
+				}
+			});
+		}
 		updateFavoriteImg(Controller.getInstance()
 			.checkJobIsFavorite(getActivity(), jobDedatils.getJobId()));
 		

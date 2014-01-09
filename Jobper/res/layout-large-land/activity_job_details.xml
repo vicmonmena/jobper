@@ -11,6 +11,8 @@
         style="@style/job_details_title_style"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView01"
+        android:layout_alignRight="@+id/jobPublishedTxt"
         android:layout_marginBottom="10dp"
         android:hint="@string/job_details_title_hint" />
 
@@ -74,16 +76,6 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/jobSalaryminTxt"
-        android:layout_toLeftOf="@+id/markAsFavoriteImg"
-        android:text="@string/job_details_published_lbl"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="16sp" />
-
-    <TextView
         android:id="@+id/TextView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -112,5 +104,25 @@
         android:text="@string/job_details_location_lbl"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/TextView01"
+        android:layout_toLeftOf="@+id/markAsFavoriteImg"
+        android:text="@string/job_details_published_lbl"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/shareJobImgView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="21dp"
+        android:layout_toLeftOf="@+id/TextView02"
+        android:contentDescription="@string/action_share"
+        android:src="@drawable/ic_share_job" />
 
 </RelativeLayout>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Jobper</string>
+    
+    <string name="action_jobs">Empleos</string>
+    <string name="action_favorites">Favoritos</string>
+    <string name="action_info">Info</string>
+    <string name="action_info_text">Jobper es un cliente móvil buscador de empleos basado en la plataforma AngelList y desarrollado por @vicmonmena</string>
+    <string name="action_notification_config">Notificación</string>
+    <string name="action_share">Compartir</string>
+
+    <string name="job_title_hint">Sin título</string>
+    <string name="job_date_hint">Sin fecha</string>
+    <string name="show_job_details">Mostrar detalles</string>
+    
+    
+    <string name="job_details_title_hint">Sin título</string>
+    <string name="job_details_published_hint">Sin fecha</string>
+    <string name="job_details_salarymin_hint">Sin salario mín.</string>
+    <string name="job_details_salarymax_hint">Sin salario máx.</string>
+    
+    <string name="job_details_startup_hint">Sin nombre</string>
+    <string name="job_details_location_hint">Sin localización</string>
+    <string name="job_details_product_desc_hint">Sin descripción</string>
+    <string name="job_details_job_role_hint">Sin rol</string>
+
+    <string name="loading_job_details">Cargando&#8230;</string>
+    
+    <string name="job_details_published_lbl">Publicado:</string>
+    <string name="job_details_salary_min_lbl">Salario Mín.:</string>
+    <string name="job_details_salary_max_lbl">Salario Máx.:</string>
+    <string name="job_details_location_lbl">Localización:</string>
+    <string name="job_details_job_type_lbl">Tipo de empleo:</string>
+    <string name="cd_marked_as_favorite">Marcado como Favorito</string>
+    <string name="cd_unmarked_as_favorite">Desmarcado como Favorito</string>
+    <string name="cd_company_logo">Logo de la startup</string>
+    
+    <string name="menu_share_job">Compartir empleo</string>
+
+    <string name="msg_uri_not_found">Niinguna URL</string>
+    
+    <string name="msg_new_job_offer">Nueva oferta</string>
+    <string name="msg_from_jobper">vía #jobper</string>
+    
+    <string name="notification_update">Un favorito ha cambiado!</string>
+    <string name="notification_delete">Un favorito ya no existe!</string>
+    <string name="notification_no_changes">Tus favoritos te esperan!</string>
+    <string name="notification_no_changes_content">Echa un vistazo a tus empleos favoritos!</string>
+    
+    <!-- preferences -->
+    <string name="notification_category_title">Notificaciones</string>
+    <string name="notification_config_summary">¿Con qué frecuencia quieres que revisemos el estado de tus empleos favoritos?</string>
+    <string name="notification_config_dialog_title">Selecciona la frecuencia</string>
+    <string name="notification_config_title">Cada cuánto tiempo</string>
+    
+    <string name="jobs_category_title">Empleos</string>
+    <string name="jobs_config_summary">¿Cuántos empleos quieres listar?</string>
+    <string name="jobs_config_dialog_title">Selecciona un número de empleos</string>
+    <string name="jobs_config_title">Cuántos</string>
+    
+</resources>

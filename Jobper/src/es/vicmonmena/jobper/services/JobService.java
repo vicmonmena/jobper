@@ -40,41 +40,44 @@ public class JobService extends IntentService{
 		Cursor cursor  = Controller.getInstance().loadFavoriteJobs(getApplication());
 		Job job =  null;
 		
-		// Comprobamos si hay algún JOB de mis favoritos actualizado
-		while (cursor.moveToNext()) {
-			
-			String jobId = cursor.getString(cursor.getColumnIndex(DBConstants.JOB_ID));
-			String updatedAt = cursor.getString(cursor.getColumnIndex(DBConstants.UPDATE_AT));
-			String title = cursor.getString(cursor.getColumnIndex(DBConstants.TITLE));
-			
-			job = Controller.getInstance().loadJob(jobId);
-			
-			if (job != null) {
-				if (!job.getUpdateAt().equals(updatedAt)) {
+		if (cursor.getCount() > 0) {
+		
+			// Comprobamos si hay algún JOB de mis favoritos actualizado
+			while (cursor.moveToNext()) {
+				
+				String jobId = cursor.getString(cursor.getColumnIndex(DBConstants.JOB_ID));
+				String updatedAt = cursor.getString(cursor.getColumnIndex(DBConstants.UPDATE_AT));
+				String title = cursor.getString(cursor.getColumnIndex(DBConstants.TITLE));
+				
+				job = Controller.getInstance().loadJob(jobId);
+				
+				if (job != null) {
+					if (!job.getUpdateAt().equals(updatedAt)) {
+						
+						// Marca como favorito y actualiza los nuevos datos en BBDD
+						job.setFavorite(true);
+						Controller.getInstance().updateFavoriteJob(getApplicationContext(), job);
+						
+						// Datos del JOB para notificar al usuario
+						bIntent.putExtra(UPDATED_JOB, job);
+						break;
+					}
+				} else {
+					// Ya no existe el job => Eliminamos de favoritos
+					job = new Job();
+					job.setJobId(jobId);
+					job.setTitle(title);
+					job.setFavorite(false);
 					
-					// Marca como favorito y actualiza los nuevos datos en BBDD
-					job.setFavorite(true);
-					Controller.getInstance().updateFavoriteJob(getApplicationContext(), job);
+					Controller.getInstance().markJobAsFavorite(
+						getApplicationContext(), job);
 					
-					// Datos del JOB para notificar al usuario
-					bIntent.putExtra(UPDATED_JOB, job);
+					bIntent.putExtra(DELETED_JOB, job);
 					break;
 				}
-			} else {
-				// Ya no existe el job => Eliminamos de favoritos
-				job = new Job();
-				job.setJobId(jobId);
-				job.setTitle(title);
-				job.setFavorite(false);
-				
-				Controller.getInstance().markJobAsFavorite(
-					getApplicationContext(), job);
-				
-				bIntent.putExtra(DELETED_JOB, job);
-				break;
 			}
+			cursor.close();
+			sendBroadcast(bIntent);
 		}
-		cursor.close();
-		sendBroadcast(bIntent);
 	}
 }

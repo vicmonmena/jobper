@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 import es.vicmonmena.jobper.Controller;
 import es.vicmonmena.jobper.R;
@@ -73,25 +70,5 @@ public class DetailsActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-	
-	/**
-	 * Recoge el evento onClick de los elementos de la IU.
-	 * @param view
-	 */
-	public void onClickView(View view) {
-    	switch (view.getId()) {
-		case R.id.startupLogoImg:
-			if (!TextUtils.isEmpty((String)view.getTag())) {
-				Intent browserIntent = new Intent(
-					Intent.ACTION_VIEW, Uri.parse((String)view.getTag()));
-				startActivity(browserIntent);
-			} else {
-				Toast.makeText(DetailsActivity.this, getString(R.string.msg_uri_not_found), Toast.LENGTH_LONG).show();
-			}
-			break;
-		default:
-			break;
-		}
     }
 }

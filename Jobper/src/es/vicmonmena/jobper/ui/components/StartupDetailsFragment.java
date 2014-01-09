@@ -1,18 +1,24 @@
 package es.vicmonmena.jobper.ui.components;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import es.vicmonmena.jobper.Controller;
 import es.vicmonmena.jobper.R;
 import es.vicmonmena.jobper.model.Startup;
+import es.vicmonmena.jobper.ui.DetailsActivity;
 
 /**
  * 
@@ -68,11 +74,16 @@ public class StartupDetailsFragment extends Fragment {
 			
 			if (!isCancelled() && result != null) {
 				if (!TextUtils.isEmpty(result.getName())) {
-					((TextView) getView().findViewById(R.id.jobStartupTxt)).setText(result.getName());
+					((TextView) getView().findViewById(R.id.jobStartupTxt))
+						.setText(result.getName());
 				}
 				
 				if (!TextUtils.isEmpty(result.getProductDescription())) {
-					((TextView) getView().findViewById(R.id.jobProductDescTxt)).setText(result.getProductDescription());
+					TextView prodDescTxtView = (TextView) getView()
+						.findViewById(R.id.jobProductDescTxt);
+					prodDescTxtView.setText(result.getProductDescription());
+					prodDescTxtView.setMovementMethod(
+						new ScrollingMovementMethod());
 				}
 				
 				if (!TextUtils.isEmpty(result.getCompanyURL())) {
@@ -106,8 +117,24 @@ public class StartupDetailsFragment extends Fragment {
         @Override
         protected void onPostExecute(Drawable result) {
         	if (!isCancelled() && result != null) {
-        		((ImageView) getView().findViewById(R.id.startupLogoImg))
-        		.setImageDrawable(result);
+        		ImageView logoStartupImg = (ImageView) getView()
+        			.findViewById(R.id.startupLogoImg);
+        		logoStartupImg.setImageDrawable(result);
+        		logoStartupImg.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						if (!TextUtils.isEmpty((String)v.getTag())) {
+							Intent browserIntent = new Intent(
+								Intent.ACTION_VIEW, Uri.parse((String)v.getTag()));
+							startActivity(browserIntent);
+						} else {
+							Toast.makeText(getActivity(), 
+								getString(R.string.msg_uri_not_found), 
+								Toast.LENGTH_LONG).show();
+						}
+					}
+				});
         	}
         }
 	}

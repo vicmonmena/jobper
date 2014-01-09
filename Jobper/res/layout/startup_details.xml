@@ -1,9 +1,10 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout1"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="5dp" >
 
@@ -11,39 +12,32 @@
         android:id="@+id/jobStartupTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="15dp"
         android:hint="@string/job_details_startup_hint"
         android:marqueeRepeatLimit="marquee_forever"
         android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/jobProductDescTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/jobStartupTxt"
-        android:layout_alignRight="@+id/startupLogoImg"
-        android:layout_below="@+id/jobStartupTxt"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/all_round_corner_gray_shape"
-        android:hint="@string/job_details_product_desc_hint"
-        android:minLines="5"
-        android:padding="5dp"
-        android:scrollbars="vertical"
-        android:textSize="14sp" 
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
 
     <ImageView
         android:id="@+id/startupLogoImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/jobProductDescTxt"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="22dp"
         android:contentDescription="@string/cd_company_logo"
+        android:maxHeight="50dp"
         android:onClick="onClickView"
+        android:padding="5dp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_imafe_not_found" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/jobProductDescTxt"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/all_round_corner_gray_shape"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hint="@string/job_details_product_desc_hint"
+        android:minLines="5"
+        android:padding="5dp"
+        android:scrollbars="vertical"
+        android:textSize="14sp" />
+
+</LinearLayout>
